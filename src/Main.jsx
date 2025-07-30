@@ -32,25 +32,37 @@ const Main = () => {
 
 
     async function getCountry() {
-
+        try {
         const response = await axios.get('https://crio-location-selector.onrender.com/countries')
         console.log(response.data)
-        setCountries(response.data)
+        setCountries(response.data)    
+        } catch (error) {
+            console.error('Error Fetching API')
+        }
+        
         
     } 
 
     async function getState(country) {
-
-        const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
-        console.log(response.data)
-        setStates(response.data)
+        try {
+             const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
+            console.log(response.data)
+            setStates(response.data)
+        } catch (error) {
+            console.error('Error Fetching API')
+        }
+       
     }
 
     async function getCity(country,state) {
-
-        const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
+        try {
+                const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
         console.log(response.data)
-        setCities(response.data)
+        setCities(response.data)    
+        } catch (error) {
+            console.error('Error Fetching API')
+        }
+        
     }
 
     return (
