@@ -77,6 +77,7 @@ const Main = () => {
 
                         setSelcountry(e.target.value);
                         setSelstate("")
+                        setSelCity("")
                         setStates([])
                         setCities([])
                         
@@ -101,6 +102,7 @@ const Main = () => {
                     onChange={(e) => {
 
                         setSelstate(e.target.value)
+                        setSelCity("")
                         setCities([])
                         
                     }}>
@@ -145,8 +147,8 @@ const Main = () => {
                     
                 </select>
             
-               { selectedCity && (
-                <h3>You selected {selectedCity},{selectedState},{selectedCountry}</h3>
+               { (selectedCity && selectedCountry && selectedState) && (
+                <h3>You selected {selectedCity}, {selectedState}, {selectedCountry}</h3>
                )}
             
             
