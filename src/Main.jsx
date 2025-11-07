@@ -11,56 +11,56 @@ const Main = () => {
   const [selectedCity, setSelCity] = useState("");
 
   useEffect(() => {
-    getCountry();
+    getCountries();
   }, []);
 
   useEffect(() => {
     if (selectedCountry) {
-      getState(selectedCountry);
+      getStates(selectedCountry);
     }
   }, [selectedCountry]);
 
   useEffect(() => {
     if (selectedCountry && selectedState) {
-      getCity(selectedCountry, selectedState);
+      getCities(selectedCountry, selectedState);
     }
   }, [selectedCountry, selectedState]);
 
-  async function getCountry() {
+  async function getCountries() {
     try {
-      const response = await axios.get(
+      const res = await axios.get(
         "https://crio-location-selector.onrender.com/countries"
       );
-      setCountries(response.data);
-    } catch (error) {
-      console.error("Error fetching countries:", error);
+      setCountries(res.data);
+    } catch (err) {
+      console.error("Error fetching countries:", err);
     }
   }
 
-  async function getState(country) {
+  async function getStates(country) {
     try {
-      const response = await axios.get(
+      const res = await axios.get(
         `https://crio-location-selector.onrender.com/countries/${country}/states`
       );
-      setStates(response.data);
-    } catch (error) {
-      console.error("Error fetching states:", error);
+      setStates(res.data);
+    } catch (err) {
+      console.error("Error fetching states:", err);
     }
   }
 
-  async function getCity(country, state) {
+  async function getCities(country, state) {
     try {
-      const response = await axios.get(
+      const res = await axios.get(
         `https://crio-location-selector.onrender.com/countries/${country}/states/${state}/cities`
       );
-      setCities(response.data);
-    } catch (error) {
-      console.error("Error fetching cities:", error);
+      setCities(res.data);
+    } catch (err) {
+      console.error("Error fetching cities:", err);
     }
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
+    <div style={{ textAlign: "center", marginTop: "40px" }}>
       <h1>Select Location</h1>
 
       {/* Country */}
