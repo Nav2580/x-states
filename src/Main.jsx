@@ -1,160 +1,129 @@
-import { useEffect, useState } from "react"
-import axios from 'axios'
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Main = () => {
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
 
-    const [countries,setCountries] = useState([])
-    const [states,setStates] = useState([])
-    const [cities,setCities] = useState([])
+  const [selectedCountry, setSelcountry] = useState("");
+  const [selectedState, setSelstate] = useState("");
+  const [selectedCity, setSelCity] = useState("");
 
-    const [selectedCountry,setSelcountry] = useState("")
-    const [selectedState,setSelstate] = useState("")
-    const [selectedCity,setSelCity] = useState("")
+  useEffect(() => {
+    getCountry();
+  }, []);
 
-    useEffect(() => {
-        getCountry()
-    },[])
-
-    useEffect(() => {
-        if(selectedCountry) {
-            getState(selectedCountry)
-        }
-        
-    },[selectedCountry])
-
-    useEffect(() => {
-        if(selectedCountry && selectedState) {
-            getCity(selectedCountry,selectedState)
-        }
-   
-    },[selectedCountry,selectedState])
-
-
-
-    async function getCountry() {
-        try {
-        const response = await axios.get('https://crio-location-selector.onrender.com/countries')
-        console.log(response.data)
-        setCountries(response.data)    
-        } catch (error) {
-            console.error('Error Fetching API')
-        }
-        
-        
-    } 
-
-    async function getState(country) {
-        try {
-             const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
-            console.log(response.data)
-            setStates(response.data)
-        } catch (error) {
-            console.error('Error Fetching API')
-        }
-       
+  useEffect(() => {
+    if (selectedCountry) {
+      getState(selectedCountry);
     }
+  }, [selectedCountry]);
 
-    async function getCity(country,state) {
-        try {
-                const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
-        console.log(response.data)
-        setCities(response.data)    
-        } catch (error) {
-            console.error('Error Fetching API')
-        }
-        
+  useEffect(() => {
+    if (selectedCountry && selectedState) {
+      getCity(selectedCountry, selectedState);
     }
+  }, [selectedCountry, selectedState]);
 
-    return (
-        <div>
-            <h1>XStates</h1>
-            
-                <select 
-                    name="country" 
-                    id="country"
-                    value={selectedCountry}
-                    onChange={(e) => {
+  async function getCountry() {
+    try {
+      const response = await axios.get(
+        "https://crio-location-selector.onrender.com/countries"
+      );
+      setCountries(response.data);
+    } catch (error) {
+      console.error("Error Fetching Countries");
+    }
+  }
 
-                        setSelcountry(e.target.value);
-                        setSelstate("")
-                        setSelCity("")
-                        setStates([])
-                        setCities([])
-                        
-                    }}>
+  async function getState(country) {
+    try {
+      const response = await axios.get(
+        `https://crio-location-selector.onrender.com/country/${country}/states`
+      );
+      setStates(response.data);
+    } catch (error) {
+      console.error("Error Fetching States");
+    }
+  }
 
-                    <option value="default"> Select Country</option>
-                    {
-                            countries.map((country) => 
-                                (
-                                    <option key={country} value={country}>{country}</option>
-                                )
-                            )
-                    } 
-                    
-                </select>
+  async function getCity(country, state) {
+    try {
+      const response = await axios.get(
+        `https://crio-location-selector.onrender.com/country/${country}/state/${state}/cities`
+      );
+      setCities(response.data);
+    } catch (error) {
+      console.error("Error Fetching Cities");
+    }
+  }
 
-                <select 
-                    name="state" 
-                    id="state"
-                    value={selectedState}
-                    disabled = {!states.length}
-                    onChange={(e) => {
+  return (
+    <div>
+      <h1>Select Location</h1>
 
-                        setSelstate(e.target.value)
-                        setSelCity("")
-                        setCities([])
-                        
-                    }}>
+      <select
+        name="country"
+        id="country"
+        value={selectedCountry}
+        onChange={(e) => {
+          setSelcountry(e.target.value);
+          setSelstate("");
+          setSelCity("");
+          setStates([]);
+          setCities([]);
+        }}
+      >
+        <option value="">Select Country</option>
+        {countries.map((country) => (
+          <option key={country} value={country}>
+            {country}
+          </option>
+        ))}
+      </select>
 
-                    <option value="default"> Select States</option>
-                    {
-                            states.map((state) => 
-                                (
-                                    <option 
-                                        key={state} 
-                                        value={state}
-                                        >{state}
-                                    </option>
-                                )
-                            )
-                    } 
-                    
-                </select>
+      <select
+        name="state"
+        id="state"
+        value={selectedState}
+        disabled={!states.length}
+        onChange={(e) => {
+          setSelstate(e.target.value);
+          setSelCity("");
+          setCities([]);
+        }}
+      >
+        <option value="">Select State</option>
+        {states.map((state) => (
+          <option key={state} value={state}>
+            {state}
+          </option>
+        ))}
+      </select>
 
-                <select 
-                    name="city" 
-                    id="city"
-                    value={selectedCity}
-                    disabled = {!cities.length}
-                    onChange={(e) => {
-                        setSelCity(e.target.value)
-                    }}
-                    >
+      <select
+        name="city"
+        id="city"
+        value={selectedCity}
+        disabled={!cities.length}
+        onChange={(e) => setSelCity(e.target.value)}
+      >
+        <option value="">Select City</option>
+        {cities.map((city) => (
+          <option key={city} value={city}>
+            {city}
+          </option>
+        ))}
+      </select>
 
-                    <option value="default"> Select City</option>
-                    {
-                            cities.map((city) => 
-                                (
-                                    <option 
-                                        key={city} 
-                                        value={city}
-                                        >{city}
-                                    </option>
-                                )
-                            )
-                    } 
-                    
-                </select>
-            
-               { (selectedCity && selectedCountry && selectedState) && (
-                <h3>You selected {selectedCity}, {selectedState}, {selectedCountry}</h3>
-               )}
-            
-            
-           
-        </div>
-    )
-}
+      {selectedCountry && selectedState && selectedCity && (
+        <h3>
+          You selected {selectedCity}, {selectedState}, {selectedCountry}
+        </h3>
+      )}
+    </div>
+  );
+};
 
-export default Main
+export default Main;
